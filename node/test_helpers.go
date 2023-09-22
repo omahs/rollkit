@@ -25,8 +25,6 @@ const (
 	Store
 )
 
-var genesisValidatorKey = ed25519.GenPrivKey()
-
 type MockTester struct {
 	t *testing.T
 }
@@ -118,16 +116,19 @@ func waitForAtLeastNBlocks(node Node, n int, source Source) error {
 	})
 }
 
-// TODO: use n and return n validators
-func getGenesisValidatorSetWithSigner(n int) ([]cmtypes.GenesisValidator, crypto.PrivKey) {
-	nodeKey := &p2p.NodeKey{
-		PrivKey: genesisValidatorKey,
+func getGenesisValidatorSetWithSigner(n int) ([]cmtypes.GenesisValidator, []crypto.PrivKey) {
+	genesisValidators := make([]cmtypes.GenesisValidator, n)
+	signingKeys := make([]crypto.PrivKey, n)
+	for i := 0; i < n; i++ {
+		genesisValidatorKey := ed25519.GenPrivKey()
+		pubKey := genesisValidatorKey.PubKey()
+		nodeKey := &p2p.NodeKey{
+			PrivKey: genesisValidatorKey,
+		}
+		signingKeys[i], _ = conv.GetNodeKey(nodeKey)
+		genesisValidators[i] = cmtypes.GenesisValidator{
+			Address: pubKey.Address(), PubKey: pubKey, Power: int64(i + 100), Name: fmt.Sprintf("gen #%v", i),
+		}
 	}
-	signingKey, _ := conv.GetNodeKey(nodeKey)
-	pubKey := genesisValidatorKey.PubKey()
-
-	genesisValidators := []cmtypes.GenesisValidator{
-		{Address: pubKey.Address(), PubKey: pubKey, Power: int64(100), Name: "gen #1"},
-	}
-	return genesisValidators, signingKey
+	return genesisValidators, signingKeys
 }

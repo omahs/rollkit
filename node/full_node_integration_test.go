@@ -47,7 +47,8 @@ func TestAggregatorMode(t *testing.T) {
 
 	key, _, _ := crypto.GenerateEd25519Key(rand.Reader)
 	anotherKey, _, _ := crypto.GenerateEd25519Key(rand.Reader)
-	genesisValidators, signingKey := getGenesisValidatorSetWithSigner(1)
+	genesisValidators, signingKeys := getGenesisValidatorSetWithSigner(1)
+	signingKey := signingKeys[0]
 	blockManagerConfig := config.BlockManagerConfig{
 		BlockTime:   1 * time.Second,
 		NamespaceID: types.NamespaceID{1, 2, 3, 4, 5, 6, 7, 8},
@@ -146,7 +147,8 @@ func TestLazyAggregator(t *testing.T) {
 	app.On("Commit", mock.Anything).Return(abci.ResponseCommit{})
 
 	key, _, _ := crypto.GenerateEd25519Key(rand.Reader)
-	genesisValidators, signingKey := getGenesisValidatorSetWithSigner(1)
+	genesisValidators, signingKeys := getGenesisValidatorSetWithSigner(1)
+	signingKey := signingKeys[0]
 	blockManagerConfig := config.BlockManagerConfig{
 		// After the genesis header is published, the syncer is started
 		// which takes little longer (due to initialization) and the syncer
@@ -553,7 +555,8 @@ func createNode(ctx context.Context, n int, aggregator bool, isLight bool, keys 
 		ctx = context.Background()
 	}
 
-	genesisValidators, signingKey := getGenesisValidatorSetWithSigner(1)
+	genesisValidators, signingKeys := getGenesisValidatorSetWithSigner(1)
+	signingKey := signingKeys[0]
 	genesis := &cmtypes.GenesisDoc{ChainID: "test", Validators: genesisValidators}
 	// TODO: need to investigate why this needs to be done for light nodes
 	genesis.InitialHeight = 1

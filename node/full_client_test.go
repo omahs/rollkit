@@ -518,7 +518,8 @@ func TestTx(t *testing.T) {
 	mockApp := &mocks.Application{}
 	mockApp.On("InitChain", mock.Anything).Return(abci.ResponseInitChain{})
 	key, _, _ := crypto.GenerateEd25519Key(crand.Reader)
-	genesisValidators, signingKey := getGenesisValidatorSetWithSigner(1)
+	genesisValidators, signingKeys := getGenesisValidatorSetWithSigner(1)
+	signingKey := signingKeys[0]
 	node, err := newFullNode(context.Background(), config.NodeConfig{
 		DALayer:    "mock",
 		Aggregator: true,
@@ -1140,7 +1141,8 @@ func TestFutureGenesisTime(t *testing.T) {
 	mockApp.On("DeliverTx", mock.Anything).Return(abci.ResponseDeliverTx{})
 	mockApp.On("CheckTx", mock.Anything).Return(abci.ResponseCheckTx{})
 	key, _, _ := crypto.GenerateEd25519Key(crand.Reader)
-	genesisValidators, signingKey := getGenesisValidatorSetWithSigner(1)
+	genesisValidators, signingKeys := getGenesisValidatorSetWithSigner(1)
+	signingKey := signingKeys[0]
 	genesisTime := time.Now().Local().Add(time.Second * time.Duration(1))
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
