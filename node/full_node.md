@@ -2,11 +2,24 @@
 
 ## Abstract
 
-The Full Node is a key component in the Rollkit network. It connects all the components and orchestrates their work. It is responsible for managing the P2P client, data availability layer client, mempool, block manager, and other services. It is initialized with a configuration, private keys, a client creator, a genesis document, and a logger.
+A Full Node is a top-level service that encapsulates different components of Rollkit and initializes/manages them. The main components are listed in the table below:
 
-## Protocol/Component Description
+ Component     | Description                                                                                                                         |
+ ----------    | ------------------------------------------------------------------------------------------------------------------------------------|
+ proxyApp      | ProxyApp is the interface to the application that consists of multiple connections. It is used to communicate with the application.|
+ genesisDoc    | GenesisDoc is the genesis document that contains information about the initial state of the blockchain.|
+ conf          | Conf is the configuration of the node. It contains all the necessary settings for the node to be initialized and function properly.|
+ P2P           | P2P is the peer-to-peer client used for communication between nodes in the network.|
+ Mempool       | Mempool is the transaction pool where all the transactions are stored before they are added to a block.|
+ Store         | Store is used to store/retrieve blocks, commits, and state.|
+ blockManager  | BlockManager is responsible for managing the operations related to blocks such as creating and validating blocks.|
+ dalc          | DALC is the Data Availability Layer Client used to interact with the data availability layer.|
+ hExService    | HExService is the Header Exchange Service used for exchanging block headers between nodes over P2P.|
+ bExService    | BExService is the Block Exchange Service used for exchanging blocks between nodes over P2P. |
 
-The Full Node is initialized with a configuration, private keys, a client creator, a genesis document, and a logger. It sets up the P2P client, data availability layer client, mempool, block manager, and other services. It also sets up the event bus and starts the proxy app connections. The Full Node also has methods for starting and stopping the node, getting the genesis document, and setting and getting the logger. It interacts with the `node.go` and `manager.go` files to manage the node and block operations.
+## Details
+
+A Full Node is initialized with a configuration, private keys, a client creator, a genesis document, and a logger. It uses them to set up the components described above. The Full Node also has methods for starting and stopping the node, getting the genesis document, and setting and getting the logger.
 
 ## Message Structure/Communication Format
 
@@ -23,4 +36,3 @@ The implementation of the Full Node can be found in the file `node/full.go`. It 
 ## References
 
 The Full Node uses the `github.com/cometbft/cometbft`, `github.com/rollkit/rollkit`, and other packages. It also interacts with the `node.go` and `manager.go` files.
-
