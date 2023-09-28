@@ -1,4 +1,4 @@
-# Node
+# Full Node
 
 ## Abstract
 
