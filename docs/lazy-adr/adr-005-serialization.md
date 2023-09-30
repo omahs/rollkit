@@ -6,7 +6,7 @@
 
 ## Context
 
-All the basic data types needs to be efficiently serialized into binary format before saving in KV store or sending to network.
+All the basic data types need to be efficiently serialized into binary format before saving in KV store or sending to network.
 
 ## Alternative Approaches
 
